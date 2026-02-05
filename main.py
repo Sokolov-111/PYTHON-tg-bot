@@ -1,3 +1,4 @@
+# For use JS syntax
 import json
 # Lib for using TG bots
 import telebot
@@ -34,13 +35,44 @@ if not bot_token:
 
 bot = telebot.TeleBot(bot_token)
 
+# --------------------------- #
+# Logic at start command
 @bot.message_handler(commands=['start'])
 def start(message):
-    markup  = types.InlineKeyboardMarkup(resize_keyboard = True)
-    btnLink = types.InlineKeyboardButton(text="Documentation for pytelegrambotapi lib", url="https://pypi.org/project/pyTelegramBotAPI/")
+    markup        = types.ReplyKeyboardMarkup(resize_keyboard=True)
+    btnChooseCity = types.KeyboardButton     (text=readDataFromFile("buttonWeather"))
     
-    markup.add(btnLink)
-    bot.send_message(message.from_user.id, "At this link you can ind telebot lib documentation.🚀", reply_markup = markup)
+    markup.add(btnChooseCity)
+    bot.send_message(message.from_user.id, readDataFromFile("startBotText")             , reply_markup = markup)
+    bot.send_message(message.from_user.id, readDataFromFile("buttonWeatherDescription1"), reply_markup = markup)
+
+# --------------------------- #
+# Open menu at command
+@bot.message_handler(func = lambda f: f.text == readDataFromFile("buttonWeather"))
+def weatherMenu(message):
+    markup = types.ReplyKeyboardMarkup(resize_keyboard = True, row_width=2)
+
+    button_city1 = types.KeyboardButton(readDataFromFile("button_choose_city1"))
+    button_city2 = types.KeyboardButton(readDataFromFile("button_choose_city2"))
+    button_other = types.KeyboardButton(readDataFromFile("button_choose_other"))
+    button_exit  = types.KeyboardButton(readDataFromFile("button_choose_exit"))
+
+    markup.add(button_city1, button_city2)
+    markup.add(button_other, button_exit)
+
+    bot.send_message(message.from_user.id, readDataFromFile("text_choose_city"), reply_markup=markup)
+
+# --------------------------- #
+# Show weather in city1 at click button_choose_city1
+@bot.message_handler(func = lambda m: m.text in readDataFromFile("button_choose_city1"))
+def showAlmatyWeather(message):
+    bot.send_message(message.from_user.id, "Погода в Алматы: -1°C")
+
+# --------------------------- #
+# Show weather in city2 at click button_choose_city1
+@bot.message_handler(func = lambda m: m.text in readDataFromFile("button_choose_city2"))
+def showAstanaWeather(message):
+    bot.send_message(message.from_user.id, "Погода в Астане: -10°C")
 
 # --------------------------- #
 # Can't stop bot work

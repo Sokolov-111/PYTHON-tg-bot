@@ -1,11 +1,16 @@
 {
     "startBotText": "Hello !👋 My name is MiniFarmBot! 🤖",
     
-    "buttonWeather":             "What city do you live in? 🏙",
-    "buttonWeatherDescription1": "Say what sity do ypu live, and i will send you weather in this sity every day. 🌤",
+    "buttonWeather":             "Choose city? 🏙",
+    "buttonWeatherDescription1": "Say what sity do you live, and I will send you weather in this sity every day. 🌤",
     "afterWeatherAnswer":        "Great ! I show you weather whenever you want! Just call me. 👌 ",
 
-    "askBotButton":      "What city do you live in? 🏙",
+    "text_choose_city":  "What city do you live in? 🏙",
     "askBotDescription": "Say what sity do ypu live, and i will send you weather in this sity every day. 🌤",
-    "afterAstAnswer":    "I went for search. ⌛️" 
+    "afterAstAnswer":    "I went for search. ⌛️",
+    
+    "button_choose_city1": "Almaty",
+    "button_choose_city2": "Astana",
+    "button_choose_other": "Other",
+    "button_choose_exit":  "Exit"
 }
