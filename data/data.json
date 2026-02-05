@@ -1,0 +1,11 @@
+{
+    "startBotText": "Hello !👋 My name is MiniFarmBot! 🤖",
+    
+    "buttonWeather":             "What city do you live in? 🏙",
+    "buttonWeatherDescription1": "Say what sity do ypu live, and i will send you weather in this sity every day. 🌤",
+    "afterWeatherAnswer":        "Great ! I show you weather whenever you want! Just call me. 👌 ",
+
+    "askBotButton":      "What city do you live in? 🏙",
+    "askBotDescription": "Say what sity do ypu live, and i will send you weather in this sity every day. 🌤",
+    "afterAstAnswer":    "I went for search. ⌛️" 
+}
