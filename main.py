@@ -4,12 +4,14 @@ import json
 import telebot
 # Import types for using buttons in bot
 from   telebot import types
+# Import lib for web scraping
+import requests
 
 # --------------------------- #
-# Finction for get data from files
+# Function for get data from files
 def readDataFromFile(key):
     file_name = ""
-    if key.strip() == "token":
+    if key.strip() in ["token", "weather_api"]:
         file_name = "./data/token.json"
     else:
         file_name = "./data/data.json"
@@ -25,6 +27,53 @@ def readDataFromFile(key):
         return data.get(key)
     
     return None
+
+# --------------------------- #
+# Function to get weather
+def get_weather(city="Almaty"):
+    # API key (can get in weatherapi.com)
+    API_KEY = readDataFromFile("weather_api")
+
+    if not API_KEY:
+        return "❌ API key not found. Please add weather_api to token.json"
+    
+    # URL for request
+    url = "http://api.weatherapi.com/v1/current.json"
+    params = {
+        "key": API_KEY,
+        "q": city,
+        "lang": "en"
+    }
+    
+    try:
+        response = requests.get(url, params=params, timeout=10)
+        data     = response.json()
+        
+        if "error" in data:
+            error_msg = data.get("message", "Unknown error")
+            return f"❌ Error: {error_msg}"
+        
+        # Get data
+        temp        = data["current"]["temp_c"]
+        feels_like  = data["current"]["feelslike_c"]
+        humidity    = data["current"]["humidity"]
+        wind_speed  = data["current"]["wind_kph"] / 3.6 
+        description = data["current"]["condition"]["text"]
+        
+        # Create answer
+        weather_info = (
+            f"🌤  Weather in {data['location']['name']}:\n"
+            f"🌡  Temperature: {temp}°C\n"
+            f"🤖 Feel as: {feels_like}°C\n"
+            f"💧  Damp: {humidity}%\n"
+            f"💨 Wind: {wind_speed:.1f} м/с\n"
+            f"📝 {description}"
+        )
+        
+        return weather_info
+        
+    except Exception as e:
+        return f"❌ Get weather error: {str(e)}"
 
 # --------------------------- #
 # Create bot and attach a token
@@ -66,13 +115,15 @@ def weatherMenu(message):
 # Show weather in city1 at click button_choose_city1
 @bot.message_handler(func = lambda m: m.text in readDataFromFile("button_choose_city1"))
 def showAlmatyWeather(message):
-    bot.send_message(message.from_user.id, "Погода в Алматы: -1°C")
+    weather = get_weather("Almaty")
+    bot.send_message(message.from_user.id, weather)
 
 # --------------------------- #
 # Show weather in city2 at click button_choose_city1
 @bot.message_handler(func = lambda m: m.text in readDataFromFile("button_choose_city2"))
 def showAstanaWeather(message):
-    bot.send_message(message.from_user.id, "Погода в Астане: -10°C")
+    weather = get_weather("Astana")
+    bot.send_message(message.from_user.id, weather)
 
 # --------------------------- #
 # Can't stop bot work
